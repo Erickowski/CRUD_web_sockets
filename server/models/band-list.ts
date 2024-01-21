@@ -1,6 +1,6 @@
 import { Band, BandI } from "./band";
 
-interface BandListI {
+export interface BandListI {
   bands: BandI[];
   addBand: (name: string) => void;
   removeBand: (id: string) => void;
