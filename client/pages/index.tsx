@@ -37,6 +37,10 @@ export default function Home() {
     socket.emit("vote-band", id);
   };
 
+  const handleDeleteBand = (id: string) => {
+    socket.emit("delete-band", id);
+  };
+
   return (
     <>
       <Head>
@@ -51,6 +55,7 @@ export default function Home() {
             data={bands}
             setData={setBands}
             onIncreaseVote={handleIncreaseVote}
+            onDeleteBand={handleDeleteBand}
           />
           <AddBand />
         </div>

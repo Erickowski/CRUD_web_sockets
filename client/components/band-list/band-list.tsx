@@ -8,9 +8,15 @@ interface BandListI {
   data: BandsType;
   setData: Dispatch<SetStateAction<BandsType>>;
   onIncreaseVote: (id: string) => void;
+  onDeleteBand: (id: string) => void;
 }
 
-export function BandList({ data, setData, onIncreaseVote }: BandListI) {
+export function BandList({
+  data,
+  setData,
+  onIncreaseVote,
+  onDeleteBand,
+}: BandListI) {
   const handleChangeName = (
     event: ChangeEvent<HTMLInputElement>,
     id: string
@@ -54,6 +60,7 @@ export function BandList({ data, setData, onIncreaseVote }: BandListI) {
             <button
               type="button"
               className="font-medium text-red-600 hover:underline"
+              onClick={() => onDeleteBand(band.id)}
             >
               Borrar
             </button>
