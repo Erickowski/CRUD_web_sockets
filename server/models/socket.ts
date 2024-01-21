@@ -16,6 +16,11 @@ export class Sockets {
       console.log("Cliente conectado");
 
       socket.emit("current-bands", this.bandList.getBands());
+
+      socket.on("vote-band", (id: string) => {
+        this.bandList.increaseVote(id);
+        this.io.emit("current-bands", this.bandList.getBands());
+      });
     });
   }
 }

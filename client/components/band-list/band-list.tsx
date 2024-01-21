@@ -7,9 +7,10 @@ import { Input } from "..";
 interface BandListI {
   data: BandsType;
   setData: Dispatch<SetStateAction<BandsType>>;
+  onIncreaseVote: (id: string) => void;
 }
 
-export function BandList({ data, setData }: BandListI) {
+export function BandList({ data, setData, onIncreaseVote }: BandListI) {
   const handleChangeName = (
     event: ChangeEvent<HTMLInputElement>,
     id: string
@@ -36,6 +37,7 @@ export function BandList({ data, setData }: BandListI) {
             <button
               type="button"
               className="font-medium bg-blue-600 text-white border-2 border-blue-600 px-3 py-2 rounded-xl hover:bg-white hover:text-blue-600 transition-colors"
+              onClick={() => onIncreaseVote(band.id)}
             >
               +1
             </button>

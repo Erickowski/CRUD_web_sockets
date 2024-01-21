@@ -33,6 +33,10 @@ export default function Home() {
     });
   }, [socket]);
 
+  const handleIncreaseVote = (id: string) => {
+    socket.emit("vote-band", id);
+  };
+
   return (
     <>
       <Head>
@@ -43,7 +47,11 @@ export default function Home() {
         <h1 className="mt-4 text-2xl font-bold">Band names</h1>
         <hr />
         <div className="mt-5 grid grid-cols-2 gap-4">
-          <BandList data={bands} setData={setBands} />
+          <BandList
+            data={bands}
+            setData={setBands}
+            onIncreaseVote={handleIncreaseVote}
+          />
           <AddBand />
         </div>
       </main>
