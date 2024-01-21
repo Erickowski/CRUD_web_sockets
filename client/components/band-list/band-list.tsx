@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useMemo } from "react";
 
 import { BandsType } from "@/types";
 
@@ -6,9 +6,28 @@ import { Input } from "..";
 
 interface BandListI {
   data: BandsType;
+  setData: Dispatch<SetStateAction<BandsType>>;
 }
 
-export function BandList({ data }: BandListI) {
+export function BandList({ data, setData }: BandListI) {
+  const handleChangeName = (
+    event: ChangeEvent<HTMLInputElement>,
+    id: string
+  ) => {
+    setData(
+      data.map((band) => {
+        if (band.id === id) {
+          band.name = event.target.value;
+        }
+        return band;
+      })
+    );
+  };
+
+  const handleBlur = (id: string, name: string) => {
+    console.log(id, name);
+  };
+
   const getRows = useMemo(() => {
     return data.map((band) => {
       return (
@@ -22,7 +41,11 @@ export function BandList({ data }: BandListI) {
             </button>
           </th>
           <td className="px-6 py-4">
-            <Input value={band.name} />
+            <Input
+              value={band.name}
+              onChange={(event) => handleChangeName(event, band.id)}
+              onBlur={() => handleBlur(band.id, band.name)}
+            />
           </td>
           <td className="px-6 py-4">{band.votes}</td>
           <td className="px-6 py-4">
