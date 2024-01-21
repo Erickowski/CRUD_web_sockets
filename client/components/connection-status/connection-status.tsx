@@ -1,10 +1,17 @@
-export function ConnectionStatus() {
+interface IConnectionStatus {
+  isOnline: boolean;
+}
+
+export function ConnectionStatus({ isOnline }: IConnectionStatus) {
   return (
     <div>
       <p>
         Service status:
-        <span className="text-green-500 ml-2">Online</span>
-        <span className="text-red-600">Offline</span>
+        <span
+          className={`${isOnline ? "text-green-500" : "text-red-600"} ml-2`}
+        >
+          {isOnline ? "Online" : "Offline"}
+        </span>
       </p>
     </div>
   );
