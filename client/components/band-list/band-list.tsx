@@ -1,6 +1,43 @@
+import { useMemo } from "react";
+
+import { BandsType } from "@/types";
+
 import { Input } from "..";
 
-export function BandList() {
+interface BandListI {
+  data: BandsType;
+}
+
+export function BandList({ data }: BandListI) {
+  const getRows = useMemo(() => {
+    return data.map((band) => {
+      return (
+        <tr className="odd:bg-white even:bg-gray-50 border-b" key={band.id}>
+          <th scope="row" className="p-3">
+            <button
+              type="button"
+              className="font-medium bg-blue-600 text-white border-2 border-blue-600 px-3 py-2 rounded-xl hover:bg-white hover:text-blue-600 transition-colors"
+            >
+              +1
+            </button>
+          </th>
+          <td className="px-6 py-4">
+            <Input value={band.name} />
+          </td>
+          <td className="px-6 py-4">{band.votes}</td>
+          <td className="px-6 py-4">
+            <button
+              type="button"
+              className="font-medium text-red-600 hover:underline"
+            >
+              Borrar
+            </button>
+          </td>
+        </tr>
+      );
+    });
+  }, [data]);
+
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 ">
@@ -18,30 +55,7 @@ export function BandList() {
             </th>
           </tr>
         </thead>
-        <tbody>
-          <tr className="odd:bg-white even:bg-gray-50 border-b">
-            <th scope="row" className="p-3">
-              <button
-                type="button"
-                className="font-medium bg-blue-600 text-white border-2 border-blue-600 px-3 py-2 rounded-xl hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                +1
-              </button>
-            </th>
-            <td className="px-6 py-4">
-              <Input />
-            </td>
-            <td className="px-6 py-4">15</td>
-            <td className="px-6 py-4">
-              <button
-                type="button"
-                className="font-medium text-red-600 hover:underline"
-              >
-                Borrar
-              </button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody>{getRows}</tbody>
       </table>
     </div>
   );

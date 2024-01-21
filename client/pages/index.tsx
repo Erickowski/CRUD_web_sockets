@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 
-import io from "socket.io-client";
 import Head from "next/head";
 
 import { ConnectionStatus, AddBand, BandList } from "@/components";
 import { connectSocketServer } from "@/utils";
+import { BandsType } from "@/types";
 
 export default function Home() {
   const [socket] = useState(connectSocketServer());
   const [online, setOnline] = useState(false);
+  const [bands, setBands] = useState<BandsType>([]);
 
   useEffect(() => {
     setOnline(socket.connected);
@@ -26,6 +27,12 @@ export default function Home() {
     });
   }, [socket]);
 
+  useEffect(() => {
+    socket.on("current-bands", (data: BandsType) => {
+      setBands(data);
+    });
+  }, [socket]);
+
   return (
     <>
       <Head>
@@ -36,7 +43,7 @@ export default function Home() {
         <h1 className="mt-4 text-2xl font-bold">Band names</h1>
         <hr />
         <div className="mt-5 grid grid-cols-2 gap-4">
-          <BandList />
+          <BandList data={bands} />
           <AddBand />
         </div>
       </main>
