@@ -5,7 +5,7 @@
 
 This a simple CRUD of band names to vote for each one and display them in a graph.
 
-Project from React Native course by https://github.com/Klerith
+Project from React + Socket.io course by https://github.com/Klerith
 
 ## Technologies
 ### Client
