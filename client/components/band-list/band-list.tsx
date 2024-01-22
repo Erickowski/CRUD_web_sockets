@@ -1,30 +1,28 @@
-import { ChangeEvent, Dispatch, SetStateAction, useMemo } from "react";
+import { ChangeEvent, useContext, useEffect, useMemo, useState } from "react";
 
 import { BandsType } from "@/types";
+import { SocketContext } from "@/context";
 
 import { Input } from "..";
 
-interface BandListI {
-  data: BandsType;
-  setData: Dispatch<SetStateAction<BandsType>>;
-  onIncreaseVote: (id: string) => void;
-  onDeleteBand: (id: string) => void;
-  onChangeBandName: (id: string, name: string) => void;
-}
+export function BandList() {
+  const { socket } = useContext(SocketContext);
+  const [bands, setBands] = useState<BandsType>([]);
 
-export function BandList({
-  data,
-  setData,
-  onIncreaseVote,
-  onDeleteBand,
-  onChangeBandName,
-}: BandListI) {
+  useEffect(() => {
+    socket.on("current-bands", (data: BandsType) => {
+      setBands(data);
+    });
+
+    return () => socket.off("current-bands");
+  }, [socket]);
+
   const handleChangeName = (
     event: ChangeEvent<HTMLInputElement>,
     id: string
   ) => {
-    setData(
-      data.map((band) => {
+    setBands(
+      bands.map((band) => {
         if (band.id === id) {
           band.name = event.target.value;
         }
@@ -34,18 +32,18 @@ export function BandList({
   };
 
   const handleBlur = (id: string, name: string) => {
-    onChangeBandName(id, name);
+    socket.emit("change-band-name", { id, name });
   };
 
   const getRows = useMemo(() => {
-    return data.map((band) => {
+    return bands.map((band) => {
       return (
         <tr className="odd:bg-white even:bg-gray-50 border-b" key={band.id}>
           <th scope="row" className="p-3">
             <button
               type="button"
               className="font-medium bg-blue-600 text-white border-2 border-blue-600 px-3 py-2 rounded-xl hover:bg-white hover:text-blue-600 transition-colors"
-              onClick={() => onIncreaseVote(band.id)}
+              onClick={() => socket.emit("vote-band", band.id)}
             >
               +1
             </button>
@@ -62,7 +60,7 @@ export function BandList({
             <button
               type="button"
               className="font-medium text-red-600 hover:underline"
-              onClick={() => onDeleteBand(band.id)}
+              onClick={() => socket.emit("delete-band", band.id)}
             >
               Borrar
             </button>
@@ -70,7 +68,7 @@ export function BandList({
         </tr>
       );
     });
-  }, [data]);
+  }, [bands]);
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
