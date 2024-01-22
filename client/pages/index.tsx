@@ -45,6 +45,10 @@ export default function Home() {
     socket.emit("change-band-name", { id, name });
   };
 
+  const handleAddBand = (name: string) => {
+    socket.emit("add-band", name);
+  };
+
   return (
     <>
       <Head>
@@ -62,7 +66,7 @@ export default function Home() {
             onDeleteBand={handleDeleteBand}
             onChangeBandName={handleChangeBandName}
           />
-          <AddBand />
+          <AddBand onAddBand={handleAddBand} />
         </div>
       </main>
     </>

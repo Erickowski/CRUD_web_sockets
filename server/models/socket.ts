@@ -34,6 +34,11 @@ export class Sockets {
           this.io.emit("current-bands", this.bandList.getBands());
         }
       );
+
+      socket.on("add-band", (name: string) => {
+        this.bandList.addBand(name);
+        this.io.emit("current-bands", this.bandList.getBands());
+      });
     });
   }
 }
