@@ -9,6 +9,7 @@ interface BandListI {
   setData: Dispatch<SetStateAction<BandsType>>;
   onIncreaseVote: (id: string) => void;
   onDeleteBand: (id: string) => void;
+  onChangeBandName: (id: string, name: string) => void;
 }
 
 export function BandList({
@@ -16,6 +17,7 @@ export function BandList({
   setData,
   onIncreaseVote,
   onDeleteBand,
+  onChangeBandName,
 }: BandListI) {
   const handleChangeName = (
     event: ChangeEvent<HTMLInputElement>,
@@ -32,7 +34,7 @@ export function BandList({
   };
 
   const handleBlur = (id: string, name: string) => {
-    console.log(id, name);
+    onChangeBandName(id, name);
   };
 
   const getRows = useMemo(() => {
