@@ -2,7 +2,7 @@ import { useContext } from "react";
 
 import Head from "next/head";
 
-import { ConnectionStatus, AddBand, BandList } from "@/components";
+import { ConnectionStatus, AddBand, BandList, BrandChart } from "@/components";
 import { SocketContext } from "@/context";
 
 export default function Home() {
@@ -17,6 +17,7 @@ export default function Home() {
         <ConnectionStatus isOnline={online} />
         <h1 className="mt-4 text-2xl font-bold">Band names</h1>
         <hr />
+        <BrandChart />
         <div className="mt-5 grid grid-cols-2 gap-4">
           <BandList />
           <AddBand />
