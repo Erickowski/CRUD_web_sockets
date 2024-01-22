@@ -3,29 +3,12 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 
 import { ConnectionStatus, AddBand, BandList } from "@/components";
-import { connectSocketServer } from "@/utils";
 import { BandsType } from "@/types";
+import { useSocket } from "@/hooks";
 
 export default function Home() {
-  const [socket] = useState(connectSocketServer());
-  const [online, setOnline] = useState(false);
   const [bands, setBands] = useState<BandsType>([]);
-
-  useEffect(() => {
-    setOnline(socket.connected);
-  }, [socket]);
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      setOnline(true);
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    socket.on("disconnect", () => {
-      setOnline(false);
-    });
-  }, [socket]);
+  const { socket, online } = useSocket("http://localhost:3001");
 
   useEffect(() => {
     socket.on("current-bands", (data: BandsType) => {
