@@ -1,20 +1,31 @@
-import { useLayoutEffect } from "react";
+import { useContext, useEffect } from "react";
 
 import { Chart } from "chart.js";
 
+import { SocketContext } from "@/context";
+import { BandsType } from "@/types";
+
 export function BrandChart() {
-  useLayoutEffect(() => {
+  const { socket } = useContext(SocketContext);
+
+  useEffect(() => {
+    socket.on("current-bands", (data: BandsType) => {
+      createGraph(data);
+    });
+  }, [socket]);
+
+  const createGraph = (bands: BandsType) => {
     const canvas = document.getElementById("myChart") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
 
     new Chart(ctx, {
       type: "horizontalBar",
       data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        labels: bands.map((band) => band.name),
         datasets: [
           {
             label: "# of Votes",
-            data: [12, 19, 3, 5, 2, 3],
+            data: bands.map((band) => band.votes),
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
               "rgba(54, 162, 235, 0.2)",
@@ -36,6 +47,7 @@ export function BrandChart() {
         ],
       },
       options: {
+        animation: false,
         scales: {
           xAxes: [
             {
@@ -45,6 +57,6 @@ export function BrandChart() {
         },
       },
     });
-  }, []);
+  };
   return <canvas id="myChart" className="w-96" />;
 }
