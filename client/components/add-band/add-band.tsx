@@ -1,13 +1,12 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
+
+import { SocketContext } from "@/context";
 
 import { Input } from "..";
 
-interface IAddBand {
-  onAddBand: (name: string) => void;
-}
-
-export function AddBand({ onAddBand }: IAddBand) {
+export function AddBand() {
   const [bandName, setBandName] = useState("");
+  const { socket } = useContext(SocketContext);
 
   const handleBandNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setBandName(e.target.value);
@@ -17,7 +16,7 @@ export function AddBand({ onAddBand }: IAddBand) {
     e.preventDefault();
 
     if (bandName.trim().length) {
-      onAddBand(bandName);
+      socket.emit("add-band", bandName);
       setBandName("");
     }
   };

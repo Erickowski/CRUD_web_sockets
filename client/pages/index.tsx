@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Head from "next/head";
 
 import { ConnectionStatus, AddBand, BandList } from "@/components";
 import { BandsType } from "@/types";
-import { useSocket } from "@/hooks";
+import { SocketContext } from "@/context";
 
 export default function Home() {
   const [bands, setBands] = useState<BandsType>([]);
-  const { socket, online } = useSocket("http://localhost:3001");
+  const { socket, online } = useContext(SocketContext);
 
   useEffect(() => {
     socket.on("current-bands", (data: BandsType) => {
@@ -28,10 +28,6 @@ export default function Home() {
     socket.emit("change-band-name", { id, name });
   };
 
-  const handleAddBand = (name: string) => {
-    socket.emit("add-band", name);
-  };
-
   return (
     <>
       <Head>
@@ -49,7 +45,7 @@ export default function Home() {
             onDeleteBand={handleDeleteBand}
             onChangeBandName={handleChangeBandName}
           />
-          <AddBand onAddBand={handleAddBand} />
+          <AddBand />
         </div>
       </main>
     </>
